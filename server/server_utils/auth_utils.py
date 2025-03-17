@@ -1,3 +1,4 @@
+from server.server_utils.server_setup import Server
 
 def read_users(file_path):
     usrs = set() # Used set here to store users for O(1) lookup through hash function
@@ -8,28 +9,27 @@ def read_users(file_path):
     return usrs
 
 
-def login(username: str, password: str, usrs: set):
+def login(server_obj: Server, username: str, password: str, usrs: set):
     
     if username not in usrs:
-        return "Invalid username"
+        return server_obj.client.send("Denied. User name or password incorrect.")
     
     if username in usrs:
         if password != usrs[username]:
-            return "Invalid password"
+            return server_obj.client.send("Denied. User name or password incorrect.")
         else:
-            return "Login successful"
+            return server_obj.client.send("login confirmed")
         
-    return "Something went wrong and function did not work as expected"
 
 
-def register(username: str, password: str, file_path: str, usrs: set):
+def new_user(server_obj: Server, username: str, password: str, file_path: str, usrs: set):
     
     if username in usrs:
-        return "Username already exists"
+        return server_obj.client.send("Denied. User account already exists.")
     else:
         with open(file_path, 'w') as file:
             file.write(f"({username}, {password})\n")
             usrs[username] = password
-        return "Registration successful"
+        return server_obj.client.send("New user account created. Please login.")
         
     

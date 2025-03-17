@@ -12,6 +12,5 @@ class Server: # OOP opproach for application
     def run_server(self):
         while True:
             client, address = self.server.accept()
-            print(f"Connection from {address} is successful!")
-            client.send("Welcome to the chatroom you can now start chatting".encode())
+            print(f"My chat room server. Version One.")
             client.close()

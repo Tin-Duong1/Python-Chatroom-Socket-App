@@ -1,7 +1,8 @@
-from server.utils.auth_utils import *
-from server.utils.server_setup import Server
+from server.server_utils.auth_utils import *
+from server.server_utils.server_setup import Server
                       
 if __name__ == "__main__":
+    
     
     ip = "127.0.0.1" # IP for the server based on the assignment description
     port = 19171 # Port for server based on PawPrint
