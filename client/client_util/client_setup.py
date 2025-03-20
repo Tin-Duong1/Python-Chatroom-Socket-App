@@ -13,7 +13,7 @@ class Client:
         try:
             self.client.connect((self.host, self.port))
             print("My chat room client. Version One.")
-            self.is_connected = True
+            self.connection = True
             return True
         except Exception as e:
             print(f"Error: {e}")

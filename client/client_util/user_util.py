@@ -1,4 +1,4 @@
-from client_setup import Client
+from client_util.client_setup import Client
 
 def login(client_obj: Client, username: str, password: str):
     
@@ -12,15 +12,16 @@ def login(client_obj: Client, username: str, password: str):
     
     login_msg = f"login {username} {password}"
     
-    client_obj.client.send(login_msg.encode())
-    
-    response = client_obj.client.recv(1024).decode()
-    
-    if response == "login confimed":
-        client_obj.logged_in = True
+    try:
+        client_obj.client.send(login_msg.encode())
+        
+        response = client_obj.client.recv(1024).decode()
+        if response == "login confirmed": 
+            client_obj.logged_in = True
         print(response)
-    else:
-        print(response)
+    except Exception as e:
+        print(f"Error during login: {e}")
+        client_obj.logged_in = False
 
 
 def new_user(client_obj: Client, username: str, password: str):
@@ -47,9 +48,16 @@ def new_user(client_obj: Client, username: str, password: str):
 
 def send_recieve_msg(client_obj: Client, msg: str):
     if client_obj.logged_in:
-        client_obj.client.send(msg.encode())
-        response = client_obj.client.recv(1024).decode()
-        print(response)
+        try:
+            formatted_msg = f"send {msg}"
+            client_obj.client.send(formatted_msg.encode())
+            response = client_obj.client.recv(1024).decode()
+            print(response)
+        except Exception as e:
+            print(f"Error sending message: {e}")
+            client_obj.connection = False
+    else:
+        print("You must be logged in to send messages")
                        
 
 def logout(client_obj: Client):
