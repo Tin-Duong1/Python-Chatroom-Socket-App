@@ -78,9 +78,12 @@ def logout(client_obj: Client):
         response = client_obj.client.recv(1024).decode()
         print(response)
         client_obj.logged_in = False
+        client_obj.connection = False
+        client_obj.client.close()
+        return True
         
-    except Exception as e:
-        print(f">Error during logout: {e}")
+    except:
+        client_obj.connection = False
         client_obj.logged_in = False
-        
+        client_obj.client.close()
     
