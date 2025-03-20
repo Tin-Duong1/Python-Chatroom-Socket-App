@@ -39,7 +39,7 @@ def new_user(client_obj: Client, username: str, password: str):
     if len(password) < 4 or len(password) > 8:
         return "Password must be between 4 and 32 characters"
     
-    register_msg = f"register {username} {password}"
+    register_msg = f"newuser {username} {password}"
     client_obj.client.send(register_msg.encode())
     
     response = client_obj.client.recv(1024).decode()
