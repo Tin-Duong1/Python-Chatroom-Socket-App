@@ -61,6 +61,7 @@ class Server:
                                 logout(self, current_usr)
                                 print(f"{current_usr} logged out.")
                                 current_usr = ""
+                                break
                         else:
                             self.client_socket.send(">Invalid command. Please try again.".encode())
                             

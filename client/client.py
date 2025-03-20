@@ -45,13 +45,11 @@ def main():
                     print(">Incorrect amount of args. Try: send <message>")
                 
             elif args_list[0] == "logout":
-                logout(client)
-                continue
-                
-            elif args_list[0] == "exit":
-                print(">Exiting client...")
-                break
-                
+                log_out_success = logout(client)
+                if log_out_success:
+                    break
+                else:
+                    print(">logout failed. You may not be logged in.")
             else:
                 print(">Unknown command. Try login, newuser, send, logout, exit")
                 
@@ -66,6 +64,7 @@ if __name__ == "__main__":
     try: 
         main()
     except KeyboardInterrupt:
+        print("\n")
         print(">Exiting client.")
         exit()
     
