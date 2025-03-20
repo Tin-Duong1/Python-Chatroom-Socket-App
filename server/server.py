@@ -22,6 +22,12 @@ def main():
     server_init.run_server()
     
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nServer shutting down...")
+        print("Server closed.")
+    except Exception as e:
+        print(f"Error: {e}")
 
 
