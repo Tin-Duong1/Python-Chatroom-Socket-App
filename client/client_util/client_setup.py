@@ -17,8 +17,17 @@ class Client:                                                                   
             self.connection = True
             return True
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error connecting to the server make sure that the server is running.")
             return False
-        
+    
+    def disconnect(self):                                                                         # disconnect method on error
+        self.logged_in = False
+        self.connection = False
+        try:
+            self.client.close()
+        except:
+            pass
+        print(">Server connection lost. Restart the client program to reconnect.")
+    
     
     

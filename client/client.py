@@ -56,10 +56,26 @@ def main():                                                                     
                     print(">logout failed. You may not be logged in.")
             else:
                 print(">Unknown command. Try login, newuser, send, logout, exit")
-                
+        
+        except ConnectionResetError:
+            print(">Connection to server is lost.")
+            client.disconnect()
+            break
+            
+        except BrokenPipeError:
+            print(">Connection to server is lost.")
+            client.disconnect()
+            break
+        
+        except KeyboardInterrupt:
+            print(">Exiting client.")
+            client.disconnect()
+            break
+        
         except Exception as e:
             print(f"Error: {e}")
             client.connection = False
+            break
             
     print(">Disconnected from server.")
     client.client.close()

@@ -4,6 +4,7 @@ def login(client_obj: Client, username: str, password: str):                   #
     
     if not client_obj.connection:
         print(">Not connected to server")
+        client_obj.disconnect()                                                        # Disconnect if not connected to server
         return
     
     if client_obj.logged_in:
@@ -21,7 +22,12 @@ def login(client_obj: Client, username: str, password: str):                   #
         else:
             print(response)                                                    # Otherwise show response without setting the flag or unsucessful login
             client_obj.logged_in = False                                       # Just to make sure that it is not set to true
-        
+    except BrokenPipeError:
+        print(">Connection to server is lost.")
+        client_obj.disconnect()                                                        # Disconnect if the connection is lost    
+    except ConnectionResetError:
+        print(">Connection to server is lost.")
+        client_obj.disconnect()
     except Exception as e:                                                     # Error handling for exceptions that can occur
         print(f">Error during login: {e}")
         client_obj.logged_in = False
@@ -31,6 +37,7 @@ def new_user(client_obj: Client, username: str, password: str):                #
     
     if not client_obj.connection:                                     
         print(">Not connected to server")
+        client_obj.disconnect()                                                        # Disconnect if not connected to server
         return
     
     if client_obj.logged_in:
@@ -43,39 +50,53 @@ def new_user(client_obj: Client, username: str, password: str):                #
     if len(password) < 4 or len(password) > 8:
         return ">Password must be between 4 and 32 characters"
     
-    register_msg = f"newuser {username} {password}"                            # Format var to send if command is correctly formatted and conditions are met
-    client_obj.client.send(register_msg.encode())                              # Send the format message to the server
-    
-    response = client_obj.client.recv(1024).decode()                           # Receive the response from the server
-    print(response)                                                            # Print response on client side
-    
-
+    register_msg = f"newuser {username} {password}"
+    try:
+        client_obj.client.send(register_msg.encode())                              # Format var to send if command is correctly formatted and conditions are met                            # Send the format message to the server
+        response = client_obj.client.recv(1024).decode()                           # Receive the response from the server
+        print(response)                                                            # Print response on client side
+    except BrokenPipeError:
+        print(">Connection to server is lost.")
+        client_obj.disconnect()
+    except ConnectionResetError:
+        print(">Connection to server is lost.")
+        client_obj.disconnect()
+    except Exception as e:                                                         # Error handling for exceptions that can occur
+        print(f">Error during new user : {e}")
+        
+        
 def send_recieve_msg(client_obj: Client, msg: str):                            # Function for the send command with same checks again and restrictions for msg
     
+    if not client_obj.connection:                                                # Check if client is connected to server
+        print(">Not connected to server")
+        client_obj.disconnect()                                                    # Disconnect if not connected to server
+        return
     if not client_obj.logged_in:
         print(">Denied. Please login first.")
-    if len(msg) < 1 or len(msg) > 256:
+    elif len(msg) < 1 or len(msg) > 256:
         print(">Message must be between 1 and 256 characters")
-        
-    if client_obj.logged_in:
+    elif client_obj.logged_in:
         try:
             formatted_msg = f"send {msg}"                                      # Format the message with send command and the 
             client_obj.client.send(formatted_msg.encode())
             response = client_obj.client.recv(1024).decode()                   # Response from server
             print(response)                                                    # Print response on client side
+        except BrokenPipeError:
+            print(">Connection to server is lost.")
+            client_obj.disconnect()                                            # Disconnect if the connection is lost
+        except ConnectionResetError:
+            print(">Connection to server is lost.")
+            client_obj.disconnect()
         except Exception as e:                                                 # Error handling for exceptions that can occur
             print(f">Error sending message: {e}")
             client_obj.connection = False
     
 
-
-        
-                       
-
 def logout(client_obj: Client):                                                # Logout function with the error and restriction checks for flags and connection
     
     if not client_obj.connection:
         print(">Not connected to server")
+        client_obj.disconnect()                                                    # Disconnect if not connected to server
         return
     
     if not client_obj.logged_in:
@@ -91,8 +112,18 @@ def logout(client_obj: Client):                                                #
         client_obj.client.close()                                             # Close the client socket
         return True
         
-    except:                                                                   # Error handling for exceptions that can occur
+    except BrokenPipeError:                                                                   # Error handling for exceptions that can occur
         client_obj.connection = False
         client_obj.logged_in = False
         client_obj.client.close()
+    
+    except ConnectionResetError:
+            print(">Connection to server is lost.")
+            client_obj.disconnect()
+
+    except Exception as e:
+        print(f">Error during logout: {e}")                                      # Print error message
+        client_obj.connection = False
+        client_obj.logged_in = False
+        client_obj.client.close()                                                 # Close the client socket
     

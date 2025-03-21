@@ -55,7 +55,7 @@ class Server:                                                                   
                                 
                             elif args[0] == "logout":                                          # check first arg for command to know how to respond 
                                 logout(self, current_usr)                                      # Call function set in other file to respond to requests
-                                print(f"{current_usr} logged out.")
+                                print(f"{current_usr} logout.")
                                 current_usr = ""
                                 break
                             
