@@ -31,7 +31,7 @@ def command_check(args: list)-> bool:
     else:
         return False
         
-
+        
 def read_users(file_path: str)-> dict:
     usrs = {} 
     try:
@@ -77,6 +77,7 @@ def new_user(server_obj: Server, username: str, password: str, file_path: str, u
         with open(file_path, 'a') as file:
             file.write(f"({username}, {password})\n")
             usrs[username] = password
+            print("New user account created.")
         return server_obj.client_socket.send(">New user account created. Please login.".encode())
         
         

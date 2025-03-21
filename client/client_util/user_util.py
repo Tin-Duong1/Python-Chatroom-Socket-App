@@ -61,7 +61,9 @@ def send_recieve_msg(client_obj: Client, msg: str):
             print(f">Error sending message: {e}")
             client_obj.connection = False
     else:
-        print(">You must be logged in to send messages")
+        client_obj.client.send(formatted_msg.encode())
+        response = client_obj.client.recv(1024).decode()
+        print(response)
                        
 
 def logout(client_obj: Client):
