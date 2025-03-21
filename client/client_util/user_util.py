@@ -32,6 +32,7 @@ def new_user(client_obj: Client, username: str, password: str):
     if not client_obj.connection:
         print(">Not connected to server")
         return
+    
     if client_obj.logged_in:
         print(">Already logged in")
         return
@@ -61,9 +62,7 @@ def send_recieve_msg(client_obj: Client, msg: str):
             print(f">Error sending message: {e}")
             client_obj.connection = False
     else:
-        client_obj.client.send(formatted_msg.encode())
-        response = client_obj.client.recv(1024).decode()
-        print(response)
+        print(">Denied. Please login first.")
                        
 
 def logout(client_obj: Client):

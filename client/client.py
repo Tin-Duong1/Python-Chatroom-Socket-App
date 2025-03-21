@@ -40,7 +40,7 @@ def main():
             elif args_list[0] == "send":
                 
                 if not client.logged_in:
-                    print(">You must be logged in to send messages.")
+                    print(">Denied. Please login first.")
                     continue        
                 if len(args_list) >= 2:
                     msg = " ".join(args_list[1:])

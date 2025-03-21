@@ -38,32 +38,26 @@ class Server:
                                     if user_name:
                                         current_usr = user_name
                                         print(f"{current_usr} login.")
-                                else:
-                                    self.client_socket.send(">Invalid login format. Use: login <username> <password>".encode())
                                 
                             elif args[0] == "newuser":
                                 if len(args) == 3:
                                     username = args[1]
                                     password = args[2]
                                     new_user(self, username, password, self.file_path, usrs)
-                                else:
-                                    self.client_socket.send(">Invalid newuser format. Use: newuser <username> <password>".encode())
                                 
                             elif args[0] == "send":
-                                if len(args) >= 2:
+                                if len(args) >= 2 and current_usr:
                                     msg = " ".join(args[1:]) 
                                     send_msg(self, msg, current_usr)
                                     print (f"{current_usr}: {msg}")
                                 else:
-                                    self.client_socket.send(">Invalid send format. Use: send <message>".encode())
+                                    self.client_socket.send(">Denied. Please login first.".encode())
                                 
                             elif args[0] == "logout":
                                 logout(self, current_usr)
                                 print(f"{current_usr} logged out.")
                                 current_usr = ""
                                 break
-                        else:
-                            self.client_socket.send(">Invalid command. Please try again.".encode())
                             
                     except Exception as e:
                         print(f"Error handling client: {e}")
