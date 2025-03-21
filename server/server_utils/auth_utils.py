@@ -4,7 +4,6 @@ class Server:
 def command_split(command: str)-> list:
     return command.split(" ")
 
-
 def command_check(args: list)-> bool:
     if not args:
         return False
@@ -66,7 +65,7 @@ def login(server_obj: Server, username: str, password: str, usrs: dict):
         
 
 def send_msg(server_obj: Server, msg: str, current_usr: str):
-    combined_msg = f"{current_usr}: {msg}"
+    combined_msg = f">{current_usr}: {msg}"
     return server_obj.client_socket.send(combined_msg.encode())
 
 

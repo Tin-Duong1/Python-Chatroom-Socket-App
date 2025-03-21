@@ -38,6 +38,10 @@ def main():
                     print(">Incorrect amount of args. Try: newuser <username> <password>")
                 
             elif args_list[0] == "send":
+                
+                if not client.logged_in:
+                    print(">You must be logged in to send messages.")
+                    continue        
                 if len(args_list) >= 2:
                     msg = " ".join(args_list[1:])
                     send_recieve_msg(client, msg)

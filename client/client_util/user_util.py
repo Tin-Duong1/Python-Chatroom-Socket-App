@@ -50,6 +50,7 @@ def new_user(client_obj: Client, username: str, password: str):
     
 
 def send_recieve_msg(client_obj: Client, msg: str):
+    
     if client_obj.logged_in:
         try:
             formatted_msg = f"send {msg}"
