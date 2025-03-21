@@ -57,7 +57,7 @@ def main():                                                                     
             else:
                 print(">Unknown command. Try login, newuser, send, logout, exit")
         
-        except ConnectionResetError:
+        except ConnectionResetError:                                                                 # Error if server shuts down or connection is lost
             print(">Connection to server is lost.")
             client.disconnect()
             break
@@ -77,7 +77,7 @@ def main():                                                                     
             client.connection = False
             break
             
-    print(">Disconnected from server.")
+
     client.client.close()
 
 if __name__ == "__main__":                                                                           # Entry to run main for client
@@ -86,5 +86,6 @@ if __name__ == "__main__":                                                      
     except KeyboardInterrupt:                                                                        # Handle keyboard interrupt to exit
         print("\n")
         print(">Exiting client.")
+        print(">Disconnected from server.")
         exit()
     
